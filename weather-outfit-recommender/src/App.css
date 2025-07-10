@@ -97,6 +97,14 @@ button {
     font-weight: bold;
     color: #fff;
   }
+  .suggestions {
+    background: #333;
+    border: 1px solid #050505;
+    color: #fff;
+  }
+  .suggestions li:hover {
+  background: #333;
+}
 }
 
 .weather-card.fade-in {
@@ -114,11 +122,11 @@ button {
   background: white;
   border: 1px solid #ccc;
   list-style: none;
-  margin-top: 4px;
+  margin-top: 36px;
   padding: 0;
   max-height: 150px;
   overflow-y: auto;
-  width: 100%;
+  width: 34.4%;
   position: absolute;
   z-index: 999;
 }
