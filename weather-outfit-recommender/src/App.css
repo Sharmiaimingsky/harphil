@@ -75,3 +75,12 @@ button {
   font-weight: bold;
   color: #444;
 }
+.history ul {
+  list-style: none;
+  padding: 0;
+}
+
+.history li {
+  cursor: pointer;
+  color: #0077cc;
+}

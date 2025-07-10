@@ -5,8 +5,20 @@ const WeatherContext = createContext();
 
 const API_KEY = "b6bbebc26abee3f08ebbcd22a6be41bb"; 
 
+const outfitSuggestions = (weather, temp) => {
+  if (!weather || temp === undefined) return "Check the weather again!";
+  const w = weather.toLowerCase();
+  if (w.includes("rain")) return "Take an umbrella";
+  if (w.includes("snow")) return "Wear snow boots and a warm coat";
+  if (temp < 10) return "Wear a heavy jacket";
+  if (temp < 20) return "Wear a light jacket";
+  if (w.includes("clear") || w.includes("sun")) return "Sunglasses suggested";
+  return "Dress comfortably";
+};
+
 function WeatherProvider({ children }) {
   const [weatherData, setWeatherData] = useState(null);
+  const [history, setHistory] = useState([]);
   const [error, setError] = useState(null);
 
   const fetchWeather = async (city) => {
@@ -24,6 +36,14 @@ function WeatherProvider({ children }) {
       setWeatherData(null);
     }
   };
+
+  return (
+    <WeatherContext.Provider value={{ weatherData, fetchWeather, history, error }}>
+      {children}
+    </WeatherContext.Provider>
+  );
+}
+
 function useWeather() {
   return useContext(WeatherContext);
 }
@@ -72,15 +92,19 @@ function WeatherDisplay() {
   );
 }
 
+function History() {
+  const { history, fetchWeather } = useWeather();
   return (
-    <WeatherContext.Provider value={{ weatherData, fetchWeather, history, error }}>
-      {children}
-    </WeatherContext.Provider>
+    <div className="history">
+      <h4>Last 5 Searches:</h4>
+      <ul>
+        {history.map((city, idx) => (
+          <li key={idx} onClick={() => fetchWeather(city)}>{city}</li>
+        ))}
+      </ul>
+    </div>
   );
 }
-
-
-
 
 function App() {
   return (
@@ -96,3 +120,4 @@ function App() {
 }
 
 export default App;
+
