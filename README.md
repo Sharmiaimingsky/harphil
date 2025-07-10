@@ -5,5 +5,9 @@
 ## Installation
 
 ```bash
+npm install framer-motion
 npm install
+
+### Run the app
+
 npm run dev
