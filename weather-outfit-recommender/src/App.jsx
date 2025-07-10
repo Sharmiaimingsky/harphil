@@ -1,10 +1,18 @@
 import { useEffect, useState, createContext, useContext } from "react";
 import './App.css';
+import { motion } from "framer-motion";
 
 const WeatherContext = createContext();
 
 const API_KEY = "b6bbebc26abee3f08ebbcd22a6be41bb"; 
-const GEO_API = "https://api.teleport.org/api/cities/?search=";
+const GEO_API = "https://wft-geo-db.p.rapidapi.com/v1/geo/cities";
+const GEO_API_OPTIONS = {
+  method: 'GET',
+  headers: {
+    'X-RapidAPI-Key': '4f0dcce84bmshac9e329bd55fd14p17ec6fjsnff18c2e61917',
+    'X-RapidAPI-Host': 'wft-geo-db.p.rapidapi.com'
+  }
+};
 const outfitSuggestions = (weather, temp) => {
   if (!weather || temp === undefined) return "Check the weather again!";
   const w = weather.toLowerCase();
@@ -67,17 +75,24 @@ function SearchBar() {
   const [city, setCity] = useState("");
  const [suggestions, setSuggestions] = useState([]);
   const [debounceTimer, setDebounceTimer] = useState(null);
+  const [loadingSuggestions, setLoadingSuggestions] = useState(false);
 
   const handleSearch = () => {
     if (city.trim()) fetchWeather(city.trim());
   };
 
-  const fetchSuggestions = async (input) => {
+   const fetchSuggestions = async (input) => {
     if (!input) return setSuggestions([]);
-    const res = await fetch(`${GEO_API}${input}`);
-    const data = await res.json();
-    const cities = data._embedded["city:search-results"]?.slice(0, 5).map(item => item.matching_full_name) || [];
-    setSuggestions(cities);
+    setLoadingSuggestions(true);
+    try {
+      const res = await fetch(`${GEO_API}?namePrefix=${input}&limit=5`, GEO_API_OPTIONS);
+      const data = await res.json();
+      const cities = data.data?.map((item) => `${item.city}, ${item.countryCode}`) || [];
+      setSuggestions(cities);
+    } catch (err) {
+      console.error("GeoDB Error:", err);
+    }
+    setLoadingSuggestions(false);
   };
 
   const handleChange = (e) => {
@@ -96,6 +111,8 @@ function SearchBar() {
         placeholder="Enter city name"
       />
       <button onClick={handleSearch}>Search</button>
+            {loadingSuggestions && <div className="spinner">Loading...</div>}
+
       {suggestions.length > 0 && (
         <ul className="suggestions">
           {suggestions.map((s, i) => (
@@ -109,14 +126,8 @@ function SearchBar() {
 
 function WeatherDisplay() {
   const { weatherData, error } = useWeather();
- const [fadeIn, setFadeIn] = useState(false);
 
-  useEffect(() => {
-    if (weatherData) {
-      setFadeIn(false);
-      setTimeout(() => setFadeIn(true), 10);
-    }
-  }, [weatherData]);
+ 
   if (error) return <div className="error">❌ {error}</div>;
   if (!weatherData) return <div className="placeholder">Search a city to see the weather!</div>;
 
@@ -126,14 +137,14 @@ function WeatherDisplay() {
   const suggestion = outfitSuggestions(condition, temp);
 
   return (
-    <div className="weather-card">
+       <motion.div className="weather-card" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
       <h2>{name}</h2>
       <p>{condition}</p>
       <p>🌡 Temp: {temp}°C</p>
       <p>💨 Wind: {wind.speed} m/s</p>
       <p>💧 Humidity: {main.humidity}%</p>
       <p className="suggestion">👕 {suggestion}</p>
-    </div>
+      </motion.div>
   );
 }
 

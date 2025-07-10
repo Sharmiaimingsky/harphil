@@ -131,3 +131,8 @@ button {
 .suggestions li:hover {
   background: #eee;
 }
+.spinner {
+  font-size: 0.9rem;
+  color: #0077cc;
+  margin-top: 0.25rem;
+}
