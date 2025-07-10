@@ -1,6 +1,6 @@
 import { useEffect, useState, createContext, useContext } from "react";
 import './App.css';
-import { motion } from "framer-motion";
+import { motion , AnimatePresence} from "framer-motion";
 
 const WeatherContext = createContext();
 
@@ -137,14 +137,23 @@ function WeatherDisplay() {
   const suggestion = outfitSuggestions(condition, temp);
 
   return (
-       <motion.div className="weather-card" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
-      <h2>{name}</h2>
-      <p>{condition}</p>
-      <p>🌡 Temp: {temp}°C</p>
-      <p>💨 Wind: {wind.speed} m/s</p>
-      <p>💧 Humidity: {main.humidity}%</p>
-      <p className="suggestion">👕 {suggestion}</p>
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={name}
+        className="weather-card"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -20 }}
+        transition={{ duration: 0.4 }}
+      >
+        <h2>{name}</h2>
+        <p>{condition}</p>
+        <p>🌡 Temp: {temp}°C</p>
+        <p>💨 Wind: {wind.speed} m/s</p>
+        <p>💧 Humidity: {main.humidity}%</p>
+        <p className="suggestion">👕 {suggestion}</p>
       </motion.div>
+    </AnimatePresence>
   );
 }
 
