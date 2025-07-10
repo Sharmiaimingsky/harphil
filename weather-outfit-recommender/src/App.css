@@ -84,3 +84,49 @@ button {
   cursor: pointer;
   color: #0077cc;
 }
+[data-theme="dark"] {
+  background-color: #121212;
+  color: #ffffff;
+
+  .weather-card {
+    background-color: #000;
+  }
+
+  .suggestion {
+    font-weight: bold;
+    color: #fff;
+  }
+}
+
+.weather-card.fade-in {
+  opacity: 0;
+  animation: fadeIn 0.5s forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+.suggestions {
+  background: white;
+  border: 1px solid #ccc;
+  list-style: none;
+  margin-top: 4px;
+  padding: 0;
+  max-height: 150px;
+  overflow-y: auto;
+  width: 100%;
+  position: absolute;
+  z-index: 999;
+}
+
+.suggestions li {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.suggestions li:hover {
+  background: #eee;
+}
