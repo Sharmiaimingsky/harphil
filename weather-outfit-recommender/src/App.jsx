@@ -4,12 +4,12 @@ import { motion , AnimatePresence} from "framer-motion";
 
 const WeatherContext = createContext();
 
-const API_KEY = "b6bbebc26abee3f08ebbcd22a6be41bb"; 
+const API_KEY =import.meta.env.VITE_API_KEY; 
 const GEO_API = "https://wft-geo-db.p.rapidapi.com/v1/geo/cities";
 const GEO_API_OPTIONS = {
   method: 'GET',
   headers: {
-    'X-RapidAPI-Key': '4f0dcce84bmshac9e329bd55fd14p17ec6fjsnff18c2e61917',
+    'X-RapidAPI-Key' :import.meta.env.VITE_RAPIDAPI_KEY, 
     'X-RapidAPI-Host': 'wft-geo-db.p.rapidapi.com'
   }
 };
