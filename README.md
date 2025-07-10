@@ -1,6 +1,6 @@
 # starting the project at 6:15pm
 
-🌦 Weather-Based Outfit Recommender
+# 🌦 Weather-Based Outfit Recommender
 A React-based app that recommends outfits based on current weather data for any searched city.
 
 # Clone the repository
